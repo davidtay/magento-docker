@@ -1,0 +1,67 @@
+# magento docker
+
+version: '3'
+networks:
+    default: 
+        external:
+            name: nginx-proxy
+services:
+    nginx-proxy:
+        image: jwilder/nginx-proxy:alpine
+        container_name: nginx-proxy
+        ports:
+          - "80:80"
+        volumes:
+          - /var/run/docker.sock:/tmp/docker.sock:ro
+    lets-encrypt:
+        image: jrcs/letsencrypt-nginx-proxy-companion
+        container_name: lets-encrypt
+        volumes:
+          - ./etc/nginx/certs:/etc/nginx/certs:ro
+          - ./etc/nginx/conf.d:/etc/nginx/conf.d
+          - ./etc/nginx/vhost.d:/etc/nginx/vhost.d 
+          - ./etc/nginx/html:/usr/share/nginx/html
+          - /var/run/docker.sock:/tmp/docker.sock:ro
+    php:
+        restart: always
+        container_name: php
+        build:
+            context: ./etc/php
+            dockerfile: Dockerfile
+    mysqldb:
+        image: mysql:5.7.22
+        container_name: ${MYSQL_HOST}
+        restart: always
+        env_file:
+            - ".env"
+        environment:
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        ports:
+            - "3306:3306"
+        volumes:
+            - "./data/db/mysql:/var/lib/mysql"
+            - "./etc/mysql/conf.d:/etc/mysql/conf.d"
+    redis:
+        image: redis:4.0.11
+        container_name: redis
+        ports:
+          - "16379:6379"
+        volumes:
+            - "./etc/redis/redis.conf:/usr/local/etc/redis.conf"
+    redis_fpc:
+        image: redis:4.0.11
+        container_name: redis_fpc
+        ports:
+          - "16380:6379"
+        volumes:
+            - "./etc/redis/redis_fpc.conf:/usr/local/etc/redis.conf"
+    redis_session:
+        image: redis:4.0.11
+        container_name: redis_session
+        ports:
+          - "16381:6379"
+        volumes:
+            - "./etc/redis/redis_session.conf:/usr/local/etc/redis.conf"
