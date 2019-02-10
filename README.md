@@ -47,5 +47,138 @@ services:
         - "./www:/var/www/local.mysite.com" ```
 - Create an image of the running PHP container: `docker commit php mysite/php`
 - Start the `mysite` application: `docker-compose up -d`
+- Sample Magento configuration: ```
+<?php
+return [
+    'backend' => [
+        'frontName' => 'admin_16yq99'
+    ],
+    'db' => [
+        'connection' => [
+            'indexer' => [
+                'host' => 'mysqldb',
+                'dbname' => 'mysite',
+                'username' => 'root',
+                'password' => 'root',
+                'model' => 'mysql4',
+                'engine' => 'innodb',
+                'initStatements' => 'SET NAMES utf8;',
+                'active' => '1',
+                'persistent' => NULL
+            ],
+            'default' => [
+                'host' => 'mysqldb',
+                'dbname' => 'mysite',
+                'username' => 'root',
+                'password' => 'root',
+                'model' => 'mysql4',
+                'engine' => 'innodb',
+                'initStatements' => 'SET NAMES utf8;',
+                'active' => '1'
+            ]
+        ],
+        'table_prefix' => ''
+    ],
+    'crypt' => [
+        'key' => '9c21fedc8395b6d91c494578cd15a621'
+    ],
+    'resource' => [
+        'default_setup' => [
+            'connection' => 'default'
+        ]
+    ],
+    'x-frame-options' => 'SAMEORIGIN',
+    'MAGE_MODE' => 'developer',
+    'cache_types' => [
+        'config' => 1,
+        'layout' => 1,
+        'block_html' => 1,
+        'collections' => 1,
+        'reflection' => 1,
+        'db_ddl' => 1,
+        'eav' => 1,
+        'customer_notification' => 1,
+        'config_integration' => 1,
+        'config_integration_api' => 1,
+        'target_rule' => 1,
+        'full_page' => 1,
+        'translate' => 1,
+        'config_webservice' => 1,
+        'compiled_config' => 1
+    ],
+    'session' => [
+        'save' => 'redis',
+        'redis' => [
+            'host' => 'redis_session',
+            'port' => '6379',
+            'password' => '',
+            'read_timeout' => '300',
+            'timeout' => '300',
+            'persistent_identifier' => '',
+            'compression_threshold' => '2048',
+            'compression_library' => 'gzip',
+            'log_level' => '7',
+            'max_concurrency' => '100',
+            'break_after_frontend' => '5',
+            'break_after_adminhtml' => '30',
+            'first_lifetime' => '600',
+            'bot_first_lifetime' => '60',
+            'bot_lifetime' => '7200',
+            'disable_locking' => '0',
+            'min_lifetime' => '60',
+            'max_lifetime' => '2592000'
+        ]
+    ],
+    'cache' => [
+        'frontend' => [
+            'default' => [
+                'backend' => 'Cm_Cache_Backend_Redis',
+                'backend_options' => [
+                    'server' => 'redis',
+                    'port' => '6379',
+                    'persistent' => 'cache-db0',
+                    'database' => '0',
+                    'password' => '',
+                    'force_standalone' => '0',
+                    'connect_retries' => '1',
+                    'read_timeout' => '10',
+                    'automatic_cleaning_factor' => '0',
+                    'compress_data' => '1',
+                    'compress_tags' => '1',
+                    'compress_threshold' => '20480',
+                    'compression_lib' => 'gzip',
+                    'use_lua' => '0'
+                ]
+            ],
+            'page_cache' => [
+                'backend' => 'Cm_Cache_Backend_Redis',
+                'backend_options' => [
+                    'server' => 'redis_fpc',
+                    'port' => '6379',
+                    'persistent' => 'cache-db1',
+                    'database' => '1',
+                    'password' => '',
+                    'force_standalone' => '0',
+                    'connect_retries' => '1',
+                    'lifetimelimit' => '57600',
+                    'compress_data' => '0'
+                ]
+            ]
+        ]
+    ],
+    'system' => [
+        'default' => [
+            'dev' => [
+                'debug' => [
+                    'debug_logging' => '0'
+                ]
+            ]
+        ]
+    ],
+    'install' => [
+        'date' => 'Mon, 10 Feb 2019 18:15:29 +0000'
+    ]
+];
+```
 
 
