@@ -30,15 +30,15 @@ services:
             dockerfile: Dockerfile
     mysqldb:
         image: mysql:5.7.22
-        container_name: ${MYSQL_HOST}
+        container_name: mysql
         restart: always
         env_file:
             - ".env"
         environment:
-            - MYSQL_DATABASE=${MYSQL_DATABASE}
-            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-            - MYSQL_USER=${MYSQL_USER}
-            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+            - MYSQL_DATABASE=mysql
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_USER=root
+            - MYSQL_PASSWORD=root
         ports:
             - "3306:3306"
         volumes:
