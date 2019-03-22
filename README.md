@@ -53,8 +53,15 @@ services:
 - The `VIRTUAL_HOST` environment variable will be picked up by the nginx proxy container.
 - Create an image of the running PHP container (container name is php): `docker commit php mysite/php`
 - Start the `mysite` application: `docker-compose up -d`
+- Install Magento (you may have to install composer):
+```
+docker exec -it mysite_php bash
+root@03a74a2e90e1:/var/www# composer create-project --repository=https://repo.magento.com/ magento/project-enterprise-edition local.mysite.com
+    Authentication required (repo.magento.com):
+      Username: 50cf47429287dr299f82e817a7cd1279
+      Password: 
+```
 - Sample Magento configuration: 
-
 ```
 <?php
 return [
