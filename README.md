@@ -8,7 +8,7 @@ This is a Docker for Magento 2 development. It creates containers for MySQL, PHP
 Configure the base containers here. 
 
 - MySQL - etc/mysql/conf.d/my.cnf
-- nginx-proxy - etc/nginx/conf.d/local.mysite.com.conf
+- nginx-proxy - etc/nginx/conf.d/default.conf
 - PHP - etc/php
 - Redis - etc/redis
 
