@@ -62,6 +62,17 @@ root@03a74a2e90e1:/var/www# composer create-project --repository=https://repo.ma
       Password: 
 ```
 https://devdocs.magento.com/guides/v2.3/install-gde/composer.html
+-- Setup Magento
+```
+cd local.mysite.com
+php bin/magento setup:install \
+> --base-url=http://local.mysite.com/ \
+> --db-host=mysqldb --db-name=mysite \
+> --db-user=root --db-password=root \
+> --admin-firstname=John --admin-lastname=Doe \
+> --admin-email=jdoe@mysite.com --admin-user=jdoe --admin-password=testing123 \
+> --language=en_US --currency=USD --timezone=America/New_York --use-rewrites=1
+```
 - Sample Magento configuration: 
 ```
 <?php
