@@ -61,6 +61,7 @@ root@03a74a2e90e1:/var/www# composer create-project --repository=https://repo.ma
       Username: 50cf47429287dr299f82e817a7cd1279
       Password: 
 ```
+https://devdocs.magento.com/guides/v2.3/install-gde/composer.html
 - Sample Magento configuration: 
 ```
 <?php
