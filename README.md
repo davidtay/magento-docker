@@ -62,7 +62,7 @@ root@03a74a2e90e1:/var/www# composer create-project --repository=https://repo.ma
       Password: 
 ```
 https://devdocs.magento.com/guides/v2.3/install-gde/composer.html
--- Setup Magento
+- Setup Magento
 ```
 cd local.mysite.com
 php bin/magento setup:install \
