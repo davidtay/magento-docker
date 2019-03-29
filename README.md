@@ -52,6 +52,31 @@ services:
 
 - The `VIRTUAL_HOST` environment variable will be picked up by the nginx proxy container.
 - Create an image of the running PHP container (container name is php): `docker commit php mysite/php`
+- Configure etc/nginx/conf.d/default.conf for your site:
+
+```
+#Nginx configuration
+
+upstream fastcgi_backend {
+# use tcp connection
+   server  mysite_php:9001;
+# or socket
+   # server   unix:/run/php/php7.1-fpm.sock;
+}
+
+server {
+    server_name local.mysite.com;
+    listen 80;
+    listen [::]:80;
+    
+    access_log /dev/stdout;
+    error_log  /dev/stderr;
+     
+    index index.php;
+    root /var/www/local.mysite.com;
+}
+```
+
 - Start the `mysite` application: `docker-compose up -d`
 - Sample Magento configuration: 
 
