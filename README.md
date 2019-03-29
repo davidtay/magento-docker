@@ -8,7 +8,7 @@ This is a Docker for Magento 2 development. It creates containers for MySQL, PHP
 Configure the base containers here. 
 
 - MySQL - etc/mysql/conf.d/my.cnf
-- nginx-proxy - etc/nginx/conf.d/local.mysite.com.conf
+- nginx-proxy - etc/nginx/conf.d/default.conf
 - PHP - etc/php
 - Redis - etc/redis
 
@@ -78,8 +78,27 @@ server {
 ```
 
 - Start the `mysite` application: `docker-compose up -d`
+- Install Magento (you may have to install composer):
+```
+docker exec -it mysite_php bash
+root@03a74a2e90e1:/var/www# composer create-project --repository=https://repo.magento.com/ magento/project-enterprise-edition local.mysite.com
+    Authentication required (repo.magento.com):
+      Username: 50cf47429287dr299f82e817a7cd1279
+      Password: 
+```
+https://devdocs.magento.com/guides/v2.3/install-gde/composer.html
+- Setup Magento
+```
+cd local.mysite.com
+php bin/magento setup:install \
+> --base-url=http://local.mysite.com/ \
+> --db-host=mysqldb --db-name=mysite \
+> --db-user=root --db-password=root \
+> --admin-firstname=John --admin-lastname=Doe \
+> --admin-email=jdoe@mysite.com --admin-user=jdoe --admin-password=testing123 \
+> --language=en_US --currency=USD --timezone=America/New_York --use-rewrites=1
+```
 - Sample Magento configuration: 
-
 ```
 <?php
 return [
