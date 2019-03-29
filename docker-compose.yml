@@ -2,9 +2,7 @@
 
 version: '3'
 networks:
-    default: 
-        external:
-            name: nginx-proxy
+    nginx-proxy:
 services:
     nginx-proxy:
         image: jwilder/nginx-proxy:alpine
