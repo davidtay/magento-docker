@@ -13,8 +13,11 @@ Configure the base containers here.
 - Redis - etc/redis
 
 ## Start
-
-`docker-compose up -d`
+```
+mkdir data/db/mysql
+docker network create magento
+docker-compose up -d
+```
 
 ## Use
 

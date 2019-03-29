@@ -2,7 +2,9 @@
 
 version: '3'
 networks:
-    nginx-proxy:
+    default:
+        external:
+           name: magento
 services:
     nginx-proxy:
         image: jwilder/nginx-proxy:alpine
