@@ -9,6 +9,7 @@ services:
     nginx-proxy:
         image: jwilder/nginx-proxy:alpine
         container_name: nginx-proxy
+        restart: always
         ports:
           - "80:80"
           - "443:443"
@@ -21,6 +22,7 @@ services:
     lets-encrypt:
         image: jrcs/letsencrypt-nginx-proxy-companion
         container_name: nginx-proxy-le
+        restart: always
         environment: 
           - NGINX_PROXY_CONTAINER=nginx-proxy
         volumes:
@@ -30,7 +32,6 @@ services:
           - ./etc/nginx/html:/usr/share/nginx/html
           - /var/run/docker.sock:/tmp/docker.sock:ro
     php:
-        restart: always
         container_name: php
         build:
             context: ./etc/php
@@ -55,6 +56,7 @@ services:
     redis:
         image: redis:4.0.11
         container_name: redis
+        restart: always
         ports:
           - "16379:6379"
         volumes:
@@ -62,6 +64,7 @@ services:
     redis_fpc:
         image: redis:4.0.11
         container_name: redis_fpc
+        restart: always
         ports:
           - "16380:6379"
         volumes:
@@ -69,6 +72,7 @@ services:
     redis_session:
         image: redis:4.0.11
         container_name: redis_session
+        restart: always
         ports:
           - "16381:6379"
         volumes:
