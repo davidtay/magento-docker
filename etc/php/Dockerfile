@@ -2,6 +2,8 @@ FROM php:7.2-fpm
 
 LABEL maintainer="David Tay <david.tay20@gmail.com>"
 
+RUN useradd -ms /bin/bash  www-data
+
 RUN apt-get update && apt-get upgrade -y \
     g++ \
     libc-client-dev \

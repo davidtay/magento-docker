@@ -33,6 +33,7 @@ services:
           - /var/run/docker.sock:/tmp/docker.sock:ro
     php:
         container_name: php
+        user: www-data
         build:
             context: ./etc/php
             dockerfile: Dockerfile
