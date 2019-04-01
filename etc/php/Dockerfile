@@ -2,8 +2,6 @@ FROM php:7.2-fpm
 
 LABEL maintainer="David Tay <david.tay20@gmail.com>"
 
-USER www-data
-
 RUN apt-get update && apt-get upgrade -y \
     g++ \
     libc-client-dev \
@@ -51,3 +49,5 @@ RUN apt-get update && apt-get upgrade -y \
     && apt-get autoremove -y --purge \
     && apt-get clean \
     && rm -Rf /tmp/*
+
+USER www-data
