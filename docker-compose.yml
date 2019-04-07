@@ -19,15 +19,17 @@ services:
           - ./etc/nginx/vhost.d:/etc/nginx/vhost.d 
           - ./etc/nginx/html:/usr/share/nginx/html
           - /var/run/docker.sock:/tmp/docker.sock:ro
-    php:
-        container_name: php
+    php7.2:
+        container_name: php7.2
         user: www-data
+        image: magento/php7.2
         build:
             context: ./etc/php
-            dockerfile: Dockerfile
+            dockerfile: Dockerfile7.2
     php7.1:
         container_name: php7.1
         user: www-data
+        image: magento/php7.1
         build:
             context: ./etc/php
             dockerfile: Dockerfile7.1

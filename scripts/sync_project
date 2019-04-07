@@ -2,7 +2,7 @@
 # Cron script to sync Magento files on the dev server and on your local
 # Set up same project path on dev server and your local
 # Args: <Home Dir> <Remote User> <IP Address> <Remote Home> <Project Path> <Project Name> <Remote unison>
-# Example: * * * * * ~/Documents/magento_unison/sync_project ~ davidtay 10.0.2.2 ~/Documents/Projects/projectname projectname
+# Example: * * * * * ~/Documents/Projects/magento-docker/scripts/sync_project ~ davidtay 10.0.2.2 ~/Documents/Projects/projectname projectname
 
 if [ "$1" == "-h" ]; then
   echo "Usage: `basename $0` <Home Dir> <Remote User> <IP Address> <Remote Home> <Project Path> <Project Name> <Remote unison>"
