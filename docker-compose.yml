@@ -19,24 +19,18 @@ services:
           - ./etc/nginx/vhost.d:/etc/nginx/vhost.d 
           - ./etc/nginx/html:/usr/share/nginx/html
           - /var/run/docker.sock:/tmp/docker.sock:ro
-    lets-encrypt:
-        image: jrcs/letsencrypt-nginx-proxy-companion
-        container_name: nginx-proxy-le
-        restart: always
-        environment: 
-          - NGINX_PROXY_CONTAINER=nginx-proxy
-        volumes:
-          - ./etc/nginx/certs:/etc/nginx/certs:ro
-          - ./etc/nginx/conf.d:/etc/nginx/conf.d
-          - ./etc/nginx/vhost.d:/etc/nginx/vhost.d 
-          - ./etc/nginx/html:/usr/share/nginx/html
-          - /var/run/docker.sock:/tmp/docker.sock:ro
     php:
         container_name: php
         user: www-data
         build:
             context: ./etc/php
             dockerfile: Dockerfile
+    php7.1:
+        container_name: php7.1
+        user: www-data
+        build:
+            context: ./etc/php
+            dockerfile: Dockerfile7.1
     mysqldb:
         image: mysql:5.7.22
         container_name: mysqldb
