@@ -1,0 +1,32 @@
+#!/bin/bash
+# Fix permissions of unison-synced files. Run in root (i.e.sudo crontab -e)
+# Args: <PROJECT PATH> <INTERVAL IN MINUTES> <OWNER:GROUP> <FILE MODE> <GROUP MODE>
+# Example: * * * * * /home/username/Documents/Projects/magento-docker/scripts/fix_owner_perms ~/Documents/Projects/projectname 5 www-data:www-data 664 775
+
+if [ "$1" == "-h" ]; then
+  echo "Usage: ./`basename $0` <PROJECT PATH> <INTERVAL IN MINUTES> <OWNER:GROUP> <FILE MODE> <GROUP MODE>"
+  exit 0
+fi
+
+# Arguments
+PROJECT_PATH=$1
+INTERVAL=${2:-5}
+OWNER_GROUP=${3:-www-data:www-data}
+FILE_MODE=${4:-664}
+GROUP_MODE=${5:-775}
+
+echo "$PROJECT_PATH $INTERVAL $OWNER_GROUP $FILE_MODE $GROUP_MODE"
+
+# Fix owner:group of all files/dirs changed X minutes ago
+find $PROJECT_PATH -newermt "$2 minutes ago" -print -exec chown $OWNER_GROUP {} +
+
+# Fix mode of files
+find $PROJECT_PATH -type f -newermt "$2 minutes ago" -print -exec chmod $FILE_MODE {} +
+
+# Fix mode of dirs
+find $PROJECT_PATH -type f -newermt "$2 minutes ago" -print -exec chmod $FILE_MODE {} +
+
+
+
+
+

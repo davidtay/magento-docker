@@ -1,0 +1,24 @@
+# Unison prf template for Magento project
+# Placeholders to be replaced
+# 1. HOME_DIR - The home dir of the user initiating the sync (i.e. ~ or /home/davidtay)
+# 2. REMOTE_USER - The destination user
+# 3. REMOTE_HOME - The destination user's home directory
+# 4. IP_ADDRESS - The destination IP address
+# 5. PROJECT_PATH - The same project path on local and remote
+# 6. PROJECT - The project name
+
+root = HOME_DIR
+root = ssh://REMOTE_USER@IP_ADDRESS/REMOTE_HOME/
+path = PROJECT_PATH
+
+servercmd=REMOTE_UNISON
+auto = true
+confirmmerge = false
+prefer=newer
+perms=0
+dontchmod=true
+ignore = Name .DS_Store
+ignore = Name */media
+ignore = Path */var
+logfile = PROJECT.log
+

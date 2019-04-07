@@ -1,0 +1,28 @@
+#!/bin/bash
+# Cron script to sync Magento files on the dev server and on your local
+# Set up same project path on dev server and your local
+# Args: <Home Dir> <Remote User> <IP Address> <Remote Home> <Project Path> <Project Name> <Remote unison>
+# Example: * * * * * ~/Documents/magento_unison/sync_project ~ davidtay 10.0.2.2 ~/Documents/Projects/projectname projectname
+
+if [ "$1" == "-h" ]; then
+  echo "Usage: `basename $0` <Home Dir> <Remote User> <IP Address> <Remote Home> <Project Path> <Project Name> <Remote unison>"
+  exit 0
+fi
+
+# Vars
+HOME_DIR=${1:=~} # Your home dir (i.e /home/davidtay or ~)
+REMOTE_USER=$2   # The remote user name. For virtualbox, it's the host user name (i.e. davidtay)
+IP_ADDRESS=$3    # IP address of the remote user (for VirtualBox, the default gateway IP 10.0.2.2 is the host IP)
+REMOTE_HOME=$4   # The remote user's home directory (i.e. on my host Mac it's /Users/davidtay)
+PROJECT_PATH=$5  # The project path has to be the same on both servers (I put mine in ~/Documents/Projects/<PROJECT NAME>)
+PROJECT=$6       # The project name
+REMOTE_UNISON=${7:-/usr/bin/unison} # Path of unison on remote. If you installed unison using brew, it's in /usr/local/bin/unison and not /usr/bin/unison as on Linux.
+
+echo "$HOME_DIR $REMOTE_USER $IP_ADDRESS $REMOTE_HOME $PROJECT_PATH $PROJECT $REMOTE_UNISON"
+
+# Copy project.tmpl to unison prf file with placeholders replaced
+cat "$(dirname -- "$0")/project.tmpl" | sed "s=HOME_DIR=$HOME_DIR=" | sed "s/REMOTE_USER/$REMOTE_USER/" | sed "s/IP_ADDRESS/$IP_ADDRESS/" | sed "s=REMOTE_HOME=$REMOTE_HOME=" | sed "s=PROJECT_PATH=$PROJECT_PATH=" | sed "s/PROJECT/$PROJECT/" | sed "s=REMOTE_UNISON=$REMOTE_UNISON=" > $HOME/.unison/$PROJECT.prf
+
+# Run unison with generated project prf file
+unison -auto -batch $PROJECT
+
