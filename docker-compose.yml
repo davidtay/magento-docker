@@ -33,6 +33,13 @@ services:
         build:
             context: ./etc/php
             dockerfile: Dockerfile7.1
+    php7.0:
+        container_name: php7.0
+        user: www-data
+        image: magento/php7.0
+        build:
+            context: ./etc/php
+            dockerfile: Dockerfile7.0
     mysqldb:
         image: mysql:5.7.22
         container_name: mysqldb
