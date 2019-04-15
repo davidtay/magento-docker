@@ -44,6 +44,7 @@ RUN apt-get update && apt-get upgrade -y \
     && yes '' | pecl install imagick && docker-php-ext-enable imagick \
     && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
     && docker-php-ext-install imap \
+    && docker-php-ext-install opcache \
     && pecl install redis && docker-php-ext-enable redis \
     && pecl install xdebug && docker-php-ext-enable xdebug \
     && apt-get autoremove -y --purge \
