@@ -52,13 +52,15 @@ RUN apt-get update && apt-get upgrade -y \
     && apt-get clean \
     && rm -Rf /tmp/*
 
-
 RUN curl --connect-timeout 10 -o ioncube.tar.gz -fkSL "https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz"; \
     tar -zxvf ioncube.tar.gz; \
     cp ioncube/ioncube_loader_lin_7.0.so /usr/local/lib/php/extensions/no-debug-non-zts-20151012/ioncube.so; \
     rm -Rf ioncube*; \
     echo "zend_extension=ioncube.so" > /usr/local/etc/php/conf.d/01-ioncube.ini;
 
+RUN curl -sS https://getcomposer.org/installer | php \
+        && mv composer.phar /usr/local/bin/ \
+        && ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
 
 USER www-data
 

@@ -29,3 +29,36 @@ project composition.
 Some [scripts](scripts/) for syncing a project's codebase between servers. For example, 
 I have my containers on another server from my local development environment. I sync the 
 codebases between the servers using Unison.
+
+## SSL
+Create a certificate authority (CA) certificate for your organization. This CA certificate 
+will then authenticate any server certificate you set up. Edit the `etc/nginx/certs/root.cnf` 
+file and add your company info. Then generate the private key and certificate:
+
+``` 
+cd etc/nginx/certs
+openssl req -x509 -new -keyout root.key -out root.crt -config root.cnf
+```
+
+On a Mac, double click the root.crt file to open Keychain Access where you can trust it 
+to accept server certificates signed with its key. 
+
+To set up a server certificate, copy 
+the `etc/nginx/certs/server.cnf` to `etc/nginx/certs/www.mysite.local.cnf` adding in the 
+host and domain of the server you want to set up:
+
+```
+cd etc/nginx/certs
+cp server.cnf www.mysite.local.cnf
+vi www.mysite.local.cnf
+```
+
+Generate the server key and certificate and then copy to your project's nginx certs directory:
+
+```
+cd etc/nginx/certs
+openssl req -nodes -new -keyout www.mysite.local.key -out www.mysite.local.csr -config www.mysite.local.cnf
+openssl x509 -req -in www.mysite.local.csr -CA root.crt -CAkey root.key -set_serial 123 -out www.mysite.local.crt -extfile www.mysite.local.cnf -days 365 -extensions x509_ext
+cp www.mysite.local.key www.mysite.local.crt ~/Documents/Projects/mysite/etc/nginx/certs
+```
+

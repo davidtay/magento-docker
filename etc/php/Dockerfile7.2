@@ -55,6 +55,10 @@ RUN curl --connect-timeout 10 -o ioncube.tar.gz -fkSL "https://downloads.ioncube
     tar -zxvf ioncube.tar.gz; \
     cp ioncube/ioncube_loader_lin_7.2.so /usr/local/lib/php/extensions/no-debug-non-zts-20170718/ioncube.so; \
 #    rm -Rf ioncube*; \
-    echo "zend_extension=ioncube.so" > /usr/local/etc/php/conf.d/01-ioncube.ini;    
+    echo "zend_extension=ioncube.so" > /usr/local/etc/php/conf.d/01-ioncube.ini;
+
+RUN curl -sS https://getcomposer.org/installer | php \
+        && mv composer.phar /usr/local/bin/ \
+        && ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
 
 USER www-data
