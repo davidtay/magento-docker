@@ -81,5 +81,12 @@ services:
           - "16381:6379"
         volumes:
             - "./etc/redis/redis_session.conf:/usr/local/etc/redis.conf"
+    mailhog:
+        image: mailhog/mailhog:v1.0.0
+        container_name: mailhog
+        ports:
+          - "1025:1025"
+          - "8025:8025"
+
 volumes:
     etc:

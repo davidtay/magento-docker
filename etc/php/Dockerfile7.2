@@ -4,6 +4,7 @@ LABEL maintainer="David Tay <david.tay20@gmail.com>"
 
 RUN apt-get update && apt-get upgrade -y \
     g++ \
+    git \
     libc-client-dev \
     libfreetype6-dev \
     libicu-dev \
@@ -60,5 +61,14 @@ RUN curl --connect-timeout 10 -o ioncube.tar.gz -fkSL "https://downloads.ioncube
 RUN curl -sS https://getcomposer.org/installer | php \
         && mv composer.phar /usr/local/bin/ \
         && ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
+
+RUN curl -O -J -L https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64 \
+    && chmod +x mhsendmail_linux_amd64 \
+    && mv mhsendmail_linux_amd64 /usr/local/bin/mhsendmail
+
+RUN curl -O https://files.magerun.net/n98-magerun2.phar \
+        && chmod +x n98-magerun2.phar && mv n98-magerun2.phar /usr/local/bin/ 
+
+RUN chown -R www-data:www-data /var/www
 
 USER www-data
