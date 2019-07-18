@@ -26,6 +26,7 @@ services:
         build:
             context: ./etc/php
             dockerfile: Dockerfile7.2
+        command: echo "Build only, not started by default."
     php7.1:
         container_name: php7.1
         user: www-data
@@ -33,6 +34,7 @@ services:
         build:
             context: ./etc/php
             dockerfile: Dockerfile7.1
+        command: echo "Build only, not started by default."
     php7.0:
         container_name: php7.0
         user: www-data
@@ -40,6 +42,7 @@ services:
         build:
             context: ./etc/php
             dockerfile: Dockerfile7.0
+        command: echo "Build only, not started by default."
     mysqldb:
         image: mysql:5.7.22
         container_name: mysqldb
@@ -87,6 +90,35 @@ services:
         ports:
           - "1025:1025"
           - "8025:8025"
-
-volumes:
-    etc:
+    elasticsearch2:
+        image: blacktop/elasticsearch:2.4
+        container_name: es2
+        environment:
+          - node.name=es2
+          - bootstrap.memory_lock=true
+          - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        ulimits:
+          memlock:
+            soft: -1
+            hard: -1
+        volumes:
+          - "./data/es/es2:/usr/share/elasticsearch/data"
+          - "./etc/elasticsearch/config/elasticsearch2.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
+        ports:
+          - 9200:9200
+    elasticsearch6:
+        image: blacktop/elasticsearch:6.8
+        container_name: es6
+        environment:
+          - node.name=es6
+          - bootstrap.memory_lock=true
+          - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        ulimits:
+          memlock:
+            soft: -1
+            hard: -1
+        volumes:
+          - "./data/es/es6:/usr/share/elasticsearch/data"
+          - "./etc/elasticsearch/config/elasticsearch6.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
+        ports:
+          - 19200:9200          
