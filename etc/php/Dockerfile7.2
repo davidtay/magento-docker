@@ -28,6 +28,7 @@ RUN apt-get update && apt-get upgrade -y \
     mysqli \
     pdo_mysql \
     soap \
+    sockets \
     zip \
     && docker-php-ext-configure gd \
     --with-freetype-dir=/usr/include/ \
@@ -65,6 +66,13 @@ RUN curl -O -J -L https://github.com/mailhog/mhsendmail/releases/download/v0.2.0
 
 RUN curl -O https://files.magerun.net/n98-magerun2.phar \
         && chmod +x n98-magerun2.phar && mv n98-magerun2.phar /usr/local/bin/ 
+
+RUN echo "deb http://deb.debian.org/debian stretch-backports main" >> /etc/apt/sources.list 
+
+#2.3.2
+RUN apt-get update && apt-get -t stretch-backports install -y \
+  libsodium-dev
+RUN pecl install -f libsodium-1.0.18
 
 RUN chown -R www-data:www-data /var/www
 
