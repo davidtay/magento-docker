@@ -121,4 +121,20 @@ services:
           - "./data/es/es6:/usr/share/elasticsearch/data"
           - "./etc/elasticsearch/config/elasticsearch6.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
         ports:
-          - 19200:9200          
+          - 19200:9200
+    rabbitmq:
+        environment:
+          - RABBITMQ_ERLANG_COOKIE=secret_cookie
+          - RABBITMQ_DEFAULT_USER=guest
+          - RABBITMQ_DEFAULT_PASS=guest
+        container_name: rabbitmq
+        hostname: rabbitmq
+        image: rabbitmq:3-management-alpine
+        ports:
+          - 15672:15672
+          - 5672:5672
+        tty: true
+        volumes:
+          - ./data/rabbitmq:/var/lib/rabbitmq
+          - ./etc/rabbitmq/conf:/etc/rabbitmq/
+        command:  bash -c "sleep 10; rabbitmq-server; rabbitmq-plugins enable rabbitmq_management;"

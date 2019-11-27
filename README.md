@@ -3,8 +3,7 @@
 This is a Docker for Magento 2 development. It creates containers for MySQL, PHP, Redis that 
 your Magento applications can use and share, and an nginx proxy that will route requests to 
 your nginx container. It allows multiple Magento applications to run, sharing database, redis 
-and base PHP image. Postfix and SSL support with Let's Encrypt coming soon.
-
+and base PHP image.
 
 ## Configure
 
@@ -13,10 +12,12 @@ Configure the base containers here.
 - MySQL - etc/mysql/conf.d/my.cnf
 - PHP - etc/php
 - Redis - etc/redis
+- RabbitMQ
 
 ## Start
 ```
 mkdir data/db/mysql
+mkdir data/rabbitmq
 docker network create magento
 docker-compose up -d
 ```
@@ -62,3 +63,25 @@ openssl x509 -req -in www.mysite.local.csr -CA root.crt -CAkey root.key -set_ser
 cp www.mysite.local.key www.mysite.local.crt ~/Documents/Projects/mysite/etc/nginx/certs
 ```
 
+## RabbitMQ
+If your docker environment is on another server from your development environment, 
+in `etc/rabbitmq/conf/rabbitmq.conf` uncomment line 70 and set `loopback_users.guest = true`. 
+Restart the container `docker-compose restart rabbitmq` to reload the configuration.
+
+Log into the RabbitMQ admin: http://192.168.0.112:15672/#/users as the guest/guest user. 
+Create a user for yourself. Log out as guest and log back in as your user. Delete the 
+guest user. Then create a user for Magento which has permissions to access virtual hosts.
+
+Add the Magento user and to `app/etc/env.php`:
+
+```
+    'queue' => [
+        'amqp' => [
+            'host' => 'rabbitmq',
+            'port' => '5672',
+            'user' => 'magento',
+            'password' => 'magento',
+            'virtualhost' => '/'
+        ]
+    ],
+```
