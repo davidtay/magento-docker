@@ -101,6 +101,9 @@ services:
           memlock:
             soft: -1
             hard: -1
+          nofile:
+            soft: 65536
+            hard: 65536
         volumes:
           - "./data/es/es2:/usr/share/elasticsearch/data"
           - "./etc/elasticsearch/config/elasticsearch2.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
@@ -117,6 +120,12 @@ services:
           memlock:
             soft: -1
             hard: -1
+          nofile:
+            soft: 65536
+            hard: 65536
+        build:
+            context: ./etc/elasticsearch
+            dockerfile: Dockerfile6
         volumes:
           - "./data/es/es6:/usr/share/elasticsearch/data"
           - "./etc/elasticsearch/config/elasticsearch6.yml:/usr/share/elasticsearch/config/elasticsearch.yml"

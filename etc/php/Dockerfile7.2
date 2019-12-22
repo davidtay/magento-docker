@@ -70,9 +70,10 @@ RUN curl -O https://files.magerun.net/n98-magerun2.phar \
 RUN echo "deb http://deb.debian.org/debian stretch-backports main" >> /etc/apt/sources.list 
 
 #2.3.2
-RUN apt-get update && apt-get -t stretch-backports install -y \
-  libsodium-dev
-RUN pecl install -f libsodium-1.0.18
+#2.3.2
+RUN apt-get update -y
+RUN apt-get install libsodium-dev -y
+RUN docker-php-ext-install sodium
 
 RUN chown -R www-data:www-data /var/www
 
