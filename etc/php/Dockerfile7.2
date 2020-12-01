@@ -47,7 +47,7 @@ RUN apt-get update && apt-get upgrade -y \
     && docker-php-ext-install opcache \
     && docker-php-ext-enable sodium \
     && pecl install redis && docker-php-ext-enable redis \
-    && pecl install xdebug && docker-php-ext-enable xdebug \
+    && pecl install xdebug-2.9.8 && docker-php-ext-enable xdebug \
     && apt-get autoremove -y --purge \
     && apt-get clean \
     && rm -Rf /tmp/*
