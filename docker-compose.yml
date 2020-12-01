@@ -43,14 +43,6 @@ services:
             context: ./etc/php
             dockerfile: Dockerfile7.1
         command: echo "Image only, not started by default."
-    php7.0:
-        container_name: php7.0
-        user: "1000:1000"
-        image: magento/php7.0
-        build:
-            context: ./etc/php
-            dockerfile: Dockerfile7.0
-        command: echo "Image only, not started by default."
     mysqldb:
         image: mysql:5.7.22
         container_name: mysqldb
