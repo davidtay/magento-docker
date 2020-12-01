@@ -1,0 +1,5 @@
+.*
+!.gitignore
+data/db/mysql/*
+!data/db/mysql/README.md
+etc/nginx/certs

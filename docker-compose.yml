@@ -1,0 +1,166 @@
+# magento docker
+
+version: '3'
+networks:
+    default:
+        external:
+           name: magento
+services:
+    nginx-proxy:
+        image: jwilder/nginx-proxy:alpine
+        container_name: nginx-proxy
+        restart: always
+        ports:
+          - "80:80"
+          - "443:443"
+        volumes:
+          - ./etc/nginx/certs:/etc/nginx/certs:ro
+          - ./etc/nginx/conf.d:/etc/nginx/conf.d
+          - ./etc/nginx/vhost.d:/etc/nginx/vhost.d 
+          - ./etc/nginx/html:/usr/share/nginx/html
+          - /var/run/docker.sock:/tmp/docker.sock:ro
+    php7.4:
+        container_name: php7.4
+        user: "1000:1000"
+        image: magento/php7.4
+        build:
+            context: ./etc/php
+            dockerfile: Dockerfile7.4
+        command: echo "Image only, not started by default."
+    php7.2:
+        container_name: php7.2
+        user: "1000:1000"
+        image: magento/php7.2
+        build:
+            context: ./etc/php
+            dockerfile: Dockerfile7.2
+        command: echo "Image only, not started by default."
+    php7.1:
+        container_name: php7.1
+        user: "1000:1000"
+        image: magento/php7.1
+        build:
+            context: ./etc/php
+            dockerfile: Dockerfile7.1
+        command: echo "Image only, not started by default."
+    mysqldb:
+        image: mysql:5.7.22
+        container_name: mysqldb
+        restart: always
+        env_file:
+            - ".env"
+        environment:
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+            - TZ=${MYSQL_TZ}
+        ports:
+            - "3306:3306"
+        volumes:
+            - "./data/db/mysql:/var/lib/mysql"
+            - "./etc/mysql/conf.d:/etc/mysql/conf.d"
+    redis:
+        image: redis:4.0.11
+        container_name: redis
+        restart: always
+        ports:
+          - "16379:6379"
+        volumes:
+            - "./etc/redis/redis.conf:/usr/local/etc/redis.conf"
+    redis_fpc:
+        image: redis:4.0.11
+        container_name: redis_fpc
+        restart: always
+        ports:
+          - "16380:6379"
+        volumes:
+            - "./etc/redis/redis_fpc.conf:/usr/local/etc/redis.conf"
+    redis_session:
+        image: redis:4.0.11
+        container_name: redis_session
+        restart: always
+        ports:
+          - "16381:6379"
+        volumes:
+            - "./etc/redis/redis_session.conf:/usr/local/etc/redis.conf"
+    mailhog:
+        image: mailhog/mailhog:v1.0.0
+        container_name: mailhog
+        restart: always
+        ports:
+          - "1025:1025"
+          - "8025:8025"
+    elasticsearch7:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
+        container_name: es7
+        environment:
+          - node.name=es7
+          - bootstrap.memory_lock=true
+          - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+        ulimits:
+          memlock:
+            soft: -1
+            hard: -1
+          nofile:
+            soft: 65536
+            hard: 65536
+        restart: always
+        build:
+            context: ./etc/elasticsearch
+            dockerfile: Dockerfile7
+        volumes:
+          - "./data/es/es7:/usr/share/elasticsearch/data"
+          - "./etc/elasticsearch/config/elasticsearch7.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
+        ports:
+          - 19200:9200
+    elasticsearch6:
+        image: blacktop/elasticsearch:6.8
+        container_name: es6
+        environment:
+          - node.name=es6
+          - bootstrap.memory_lock=true
+          - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+        ulimits:
+          memlock:
+            soft: -1
+            hard: -1
+          nofile:
+            soft: 65536
+            hard: 65536
+        restart: always
+        build:
+            context: ./etc/elasticsearch
+            dockerfile: Dockerfile6
+        volumes:
+          - "./data/es/es6:/usr/share/elasticsearch/data"
+          - "./etc/elasticsearch/config/elasticsearch6.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
+        ports:
+          - 19201:9200
+    rabbitmq:
+        environment:
+          - RABBITMQ_ERLANG_COOKIE=secret_cookie
+          - RABBITMQ_DEFAULT_USER=guest
+          - RABBITMQ_DEFAULT_PASS=guest
+        container_name: rabbitmq
+        hostname: rabbitmq
+        image: rabbitmq:3-management-alpine
+        restart: always
+        ports:
+          - 15672:15672
+          - 5672:5672
+        tty: true
+        volumes:
+          - ./data/rabbitmq:/var/lib/rabbitmq
+          - ./etc/rabbitmq/conf:/etc/rabbitmq/
+        command:  bash -c "sleep 10; rabbitmq-server; rabbitmq-plugins enable rabbitmq_management;"
+    chrome:
+        image: 'browserless/chrome:latest'
+        container_name: "chrome"
+        restart: always
+        ports: 
+          - "3000:3000"
+        environment:
+          VIRTUAL_HOST: ${CHROME_VIRTUAL_HOST}
+          VIRTUAL_PROTO: ${CHROME_VIRTUAL_PROTO}
+          VIRTUAL_PORT: ${CHROME_VIRTUAL_PORT}
