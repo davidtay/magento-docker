@@ -61,7 +61,7 @@ RUN curl -sS https://getcomposer.org/installer | php \
     && ln -s /usr/local/bin/composer.phar /usr/local/bin/composer \
     && composer self-update 1.10.17
 
-RUN curl -O -J -L https://github.com/mailhog/mhsendmail/releases/download/v0.2.1/mhsendmail_linux_amd64 \
+RUN curl -O -J -L https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64 \
     && chmod +x mhsendmail_linux_amd64 \
     && mv mhsendmail_linux_amd64 /usr/local/bin/mhsendmail
 
