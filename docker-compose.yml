@@ -6,6 +6,19 @@ networks:
         external:
            name: magento
 services:
+#    varnish:
+#        image: varnish:stable
+#        container_name: varnish
+#        volumes:
+#          - "./etc/varnish/default.vcl:/etc/varnish/default.vcl"
+#        ports:
+#          - "80:80"
+#          - "443:443"
+#        tmpfs:
+#          - /var/lib/varnish:exec
+#        environment:
+#          - VARNISH_SIZE=2G  
+#        command: "-p default_keep=300"
     nginx-proxy:
         image: jwilder/nginx-proxy:alpine
         container_name: nginx-proxy
@@ -19,6 +32,14 @@ services:
           - ./etc/nginx/vhost.d:/etc/nginx/vhost.d 
           - ./etc/nginx/html:/usr/share/nginx/html
           - /var/run/docker.sock:/tmp/docker.sock:ro
+    php8.1:
+        container_name: php8.1
+        user: "1000:1000"
+        image: magento/php8.1
+        build:
+            context: ./etc/php
+            dockerfile: Dockerfile8.1
+        command: echo "Image only, not started by default."
     php7.4:
         container_name: php7.4
         user: "1000:1000"
@@ -27,24 +48,8 @@ services:
             context: ./etc/php
             dockerfile: Dockerfile7.4
         command: echo "Image only, not started by default."
-    php7.2:
-        container_name: php7.2
-        user: "1000:1000"
-        image: magento/php7.2
-        build:
-            context: ./etc/php
-            dockerfile: Dockerfile7.2
-        command: echo "Image only, not started by default."
-    php7.1:
-        container_name: php7.1
-        user: "1000:1000"
-        image: magento/php7.1
-        build:
-            context: ./etc/php
-            dockerfile: Dockerfile7.1
-        command: echo "Image only, not started by default."
     mysqldb:
-        image: mysql:8.0.23
+        image: mysql:8.0.28
         cap_add:
             - SYS_NICE
         container_name: mysqldb
@@ -63,7 +68,7 @@ services:
             - "./data/db/mysql:/var/lib/mysql"
             - "./etc/mysql/conf.d:/etc/mysql/conf.d"
     redis:
-        image: redis:5.0.6
+        image: redis:6.2.6
         container_name: redis
         restart: always
         ports:
@@ -71,7 +76,7 @@ services:
         volumes:
             - "./etc/redis/redis.conf:/usr/local/etc/redis.conf"
     redis_fpc:
-        image: redis:5.0.6
+        image: redis:6.2.6
         container_name: redis_fpc
         restart: always
         ports:
@@ -79,7 +84,7 @@ services:
         volumes:
             - "./etc/redis/redis_fpc.conf:/usr/local/etc/redis.conf"
     redis_session:
-        image: redis:5.0.6
+        image: redis:6.2.6
         container_name: redis_session
         restart: always
         ports:
@@ -94,7 +99,7 @@ services:
           - "1025:1025"
           - "8025:8025"
     elasticsearch7:
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
         container_name: es7
         environment:
           - node.name=es7
@@ -116,29 +121,11 @@ services:
           - "./etc/elasticsearch/config/elasticsearch7.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
         ports:
           - 19200:9200
-    elasticsearch6:
-        image: blacktop/elasticsearch:6.8
-        container_name: es6
-        environment:
-          - node.name=es6
-          - bootstrap.memory_lock=true
-          - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-        ulimits:
-          memlock:
-            soft: -1
-            hard: -1
-          nofile:
-            soft: 65536
-            hard: 65536
-        restart: always
-        build:
-            context: ./etc/elasticsearch
-            dockerfile: Dockerfile6
-        volumes:
-          - "./data/es/es6:/usr/share/elasticsearch/data"
-          - "./etc/elasticsearch/config/elasticsearch6.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
+    elasticsearch-head:
+        image: mobz/elasticsearch-head:5
+        container_name: es7-head
         ports:
-          - 19201:9200
+          - 9100:9100
     rabbitmq:
         environment:
           - RABBITMQ_ERLANG_COOKIE=secret_cookie

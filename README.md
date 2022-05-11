@@ -64,15 +64,11 @@ cp www.mysite.local.key www.mysite.local.crt ~/Documents/Projects/mysite/etc/ngi
 ```
 
 ## RabbitMQ
-If your docker environment is on another server from your development environment, 
-in `etc/rabbitmq/conf/rabbitmq.conf` uncomment line 70 and set `loopback_users.guest = true`. 
-Restart the container `docker-compose restart rabbitmq` to reload the configuration.
-
 Log into the RabbitMQ admin: http://192.168.0.112:15672/#/users as the guest/guest user. 
 Create a user for yourself. Log out as guest and log back in as your user. Delete the 
 guest user. Then create a user for Magento which has permissions to access virtual hosts.
 
-Add the Magento user and to `app/etc/env.php`:
+Add the Magento user to `app/etc/env.php`:
 
 ```
     'queue' => [
@@ -85,3 +81,5 @@ Add the Magento user and to `app/etc/env.php`:
         ]
     ],
 ```
+
+Url to the elasticsearch-head admin: http://localhost:9100/

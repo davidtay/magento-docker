@@ -15,8 +15,8 @@ x509_extensions    = x509_ext
 # Note that the following are in 'reverse order' to what you'd expect to see.
 
 countryName = US
-organizationName = MySite
-commonName = www.mysite.local
+organizationName = Integrated Supply Network
+commonName = ISN CA
 
 [ x509_ext ]
 
