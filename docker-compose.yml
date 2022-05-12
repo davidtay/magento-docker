@@ -6,32 +6,43 @@ networks:
         external:
            name: magento
 services:
-#    varnish:
-#        image: varnish:stable
-#        container_name: varnish
-#        volumes:
-#          - "./etc/varnish/default.vcl:/etc/varnish/default.vcl"
+    varnish:
+        image: varnish:stable
+        container_name: varnish
+        restart: always
+        volumes:
+          - "./etc/varnish/default.vcl:/etc/varnish/default.vcl"
+        ports:
+          - "80:80"
+        tmpfs:
+          - /var/lib/varnish:exec
+        environment:
+          - VARNISH_SIZE=2G  
+        command: "-p default_keep=300"
+    hitch:
+        image: hitch:latest
+        container_name: hitch
+        restart: always
+        volumes:
+        - ./etc/hitch/hitch.conf:/etc/hitch/hitch.conf:ro
+        - ./etc/nginx/certs:/etc/hitch/certs
+        ports:
+         - "443:443" 
+        depends_on:
+          - "varnish"
+#    nginx-proxy:
+#        image: jwilder/nginx-proxy:alpine
+#        container_name: nginx-proxy
+#        restart: always
 #        ports:
 #          - "80:80"
 #          - "443:443"
-#        tmpfs:
-#          - /var/lib/varnish:exec
-#        environment:
-#          - VARNISH_SIZE=2G  
-#        command: "-p default_keep=300"
-    nginx-proxy:
-        image: jwilder/nginx-proxy:alpine
-        container_name: nginx-proxy
-        restart: always
-        ports:
-          - "80:80"
-          - "443:443"
-        volumes:
-          - ./etc/nginx/certs:/etc/nginx/certs:ro
-          - ./etc/nginx/conf.d:/etc/nginx/conf.d
-          - ./etc/nginx/vhost.d:/etc/nginx/vhost.d 
-          - ./etc/nginx/html:/usr/share/nginx/html
-          - /var/run/docker.sock:/tmp/docker.sock:ro
+#        volumes:
+#          - ./etc/nginx/certs:/etc/nginx/certs:ro
+#          - ./etc/nginx/conf.d:/etc/nginx/conf.d
+#          - ./etc/nginx/vhost.d:/etc/nginx/vhost.d 
+#          - ./etc/nginx/html:/usr/share/nginx/html
+#          - /var/run/docker.sock:/tmp/docker.sock:ro
     php8.1:
         container_name: php8.1
         user: "1000:1000"

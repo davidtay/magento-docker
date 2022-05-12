@@ -1,18 +1,20 @@
 # Magento 2 Docker
 
 This is a Docker for Magento 2 development. It creates containers for MySQL, PHP, Redis that 
-your Magento applications can use and share, and an nginx proxy that will route requests to 
-your nginx container. It allows multiple Magento applications to run, sharing database, redis 
-and base PHP image.
+your Magento applications can use and share, and Varnish/Hitch that will route requests to 
+your nginx containers. It allows multiple Magento applications to run, sharing database, Redis, 
+Varnish and base PHP image.
 
 ## Configure
 
 Configure the base containers here. 
 
+- Elasticsearch - etc/elasticsearch/config/elasticsearch7.yml
 - MySQL - etc/mysql/conf.d/my.cnf
 - PHP - etc/php
+- RabbitMQ - etc/rabbitmq/conf/rabbitmq.conf
 - Redis - etc/redis
-- RabbitMQ
+- Varnish - etc/varnish/default.vcl
 
 ## Start
 ```
@@ -22,14 +24,9 @@ docker network create magento
 docker-compose up -d
 ```
 
-## Use
+## Projects
 Use the Magento Develop project https://github.com/davidtay/magento-develop for example 
 project composition.
-
-## Scripts
-Some [scripts](scripts/) for syncing a project's codebase between servers. For example, 
-I have my containers on another server from my local development environment. I sync the 
-codebases between the servers using Unison.
 
 ## SSL
 Create a certificate authority (CA) certificate for your organization. This CA certificate 
@@ -60,6 +57,7 @@ Generate the server key and certificate and then copy to your project's nginx ce
 cd etc/nginx/certs
 openssl req -nodes -new -keyout www.mysite.local.key -out www.mysite.local.csr -config www.mysite.local.cnf
 openssl x509 -req -in www.mysite.local.csr -CA root.crt -CAkey root.key -set_serial 123 -out www.mysite.local.crt -extfile www.mysite.local.cnf -days 365 -extensions x509_ext
+cat www.mysite.local.crt www.mysite.local.key > www.mysite.local.pem
 cp www.mysite.local.key www.mysite.local.crt ~/Documents/Projects/mysite/etc/nginx/certs
 ```
 
@@ -82,4 +80,5 @@ Add the Magento user to `app/etc/env.php`:
     ],
 ```
 
+## Elasticsearch
 Url to the elasticsearch-head admin: http://localhost:9100/
