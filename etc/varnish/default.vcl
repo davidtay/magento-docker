@@ -18,6 +18,11 @@ sub vcl_recv {
     } else {
         set req.http.X-Forwarded-Proto = "http";
     }
+    if (req.http.x-forwarded-for) {
+         set req.http.X-Forwarded-For = req.http.X-Forwarded-For + ", " + "172.17.0.1";
+    } else {
+         set req.http.X-Forwarded-For = "172.17.0.1";
+    }    
     if(req.http.host == "www.mysite.local" ) {
         set req.backend_hint = mysite;
     }

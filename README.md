@@ -1,9 +1,9 @@
 # Magento 2 Docker
 
 This is a Docker for Magento 2 development. It creates containers for MySQL, PHP, Redis that 
-your Magento applications can use and share, and Varnish/Hitch that will route requests to 
+your Magento projects can use and share, and Varnish/Hitch that will route requests to 
 your nginx containers. It allows multiple Magento applications to run, sharing database, Redis, 
-Varnish and base PHP image.
+elasticsearch, Varnish, rabbitmq and base PHP image.
 
 ## Configure
 
