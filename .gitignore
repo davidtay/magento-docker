@@ -2,4 +2,6 @@
 !.gitignore
 data/db/mysql/*
 !data/db/mysql/README.md
+data/es
+data/rabbitmq
 etc/nginx/certs

@@ -1,0 +1,50 @@
+#Nginx configuration
+
+upstream fastcgi_backend {
+# use tcp connection
+   server PHP_CONTAINER:9000;
+# or socket
+   # server   unix:/run/php/php7.1-fpm.sock;
+}
+
+map $request_uri $MAGE_RUN_CODE {
+    default   default;
+}
+
+map $request_uri $MAGE_RUN_TYPE {
+    default   store;
+}
+
+server {
+   server_name VIRTUAL_HOST;
+   listen 80;
+   listen [::]:80;
+
+   index index.php;
+   error_log  /dev/stdout;
+   access_log /dev/stdout;
+   proxy_read_timeout 600s;
+
+   set $MAGE_ROOT /var/www/html;
+
+   include magento-nginx.conf;
+}
+
+server {
+   server_name VIRTUAL_HOST;
+   listen 443 ssl http2;
+   listen [::]:443 ssl http2;
+   fastcgi_param HTTPS on;
+   ssl_certificate /etc/nginx/certs/VIRTUAL_HOST.crt;
+   ssl_certificate_key /etc/nginx/certs/VIRTUAL_HOST.key;
+   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+
+   index index.php;
+   error_log  /dev/stdout;
+   access_log /dev/stdout;
+   proxy_read_timeout 600s;
+
+   set $MAGE_ROOT /var/www/html;
+   
+   include magento-nginx.conf;
+}
