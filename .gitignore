@@ -4,4 +4,6 @@ data/db/mysql/*
 !data/db/mysql/README.md
 data/es
 data/rabbitmq
+data/opensearch
 etc/nginx/certs
+etc/opensearch/logs
