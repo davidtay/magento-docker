@@ -89,10 +89,6 @@ services:
           - SE_NODE_OVERRIDE_MAX_SESSIONS=true
         extra_hosts:
          - "www.mysite.local:172.17.0.1"
-         - "white-label.isnweb.local:172.17.0.1"
-         - "or.toolweb.local:172.17.0.1"
-         - "www.autoplustools.local:172.17.0.1"
-         - "salespad.isnweb.local:172.17.0.1"
         ports:
          - 4444:4444
     mysqldb:
