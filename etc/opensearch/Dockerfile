@@ -1,4 +1,4 @@
-FROM opensearchproject/opensearch:latest
+FROM opensearchproject/opensearch:1.3.3
 
 # RUN /usr/share/opensearch/bin/opensearch-plugin remove analysis-icu 
  

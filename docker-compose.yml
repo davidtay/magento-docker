@@ -84,8 +84,15 @@ services:
     selenium:
         container_name: selenium
         image: selenium/standalone-chrome:4.3.0-20220628
+        environment:
+          - SE_NODE_MAX_SESSIONS=5
+          - SE_NODE_OVERRIDE_MAX_SESSIONS=true
         extra_hosts:
          - "www.mysite.local:172.17.0.1"
+         - "white-label.isnweb.local:172.17.0.1"
+         - "or.toolweb.local:172.17.0.1"
+         - "www.autoplustools.local:172.17.0.1"
+         - "salespad.isnweb.local:172.17.0.1"
         ports:
          - 4444:4444
     mysqldb:
@@ -139,7 +146,7 @@ services:
           - "1025:1025"
           - "8025:8025"
     opensearch:
-        image: opensearchproject/opensearch:latest
+        image: opensearchproject/opensearch:1.3.3
         container_name: opensearch
         environment:
           - node.name=opensearch
@@ -164,29 +171,6 @@ services:
         ports:
           - 19201:9200
           - 9600:9600
-#    elasticsearch7:
-#        image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
-#        container_name: es7
-#        environment:
-#          - node.name=es7
-#          - bootstrap.memory_lock=true
-#          - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-#        ulimits:
-#          memlock:
-#            soft: -1
-#            hard: -1
-#          nofile:
-#            soft: 65536
-#            hard: 65536
-#        restart: always
-#        build:
-#            context: ./etc/elasticsearch
-#            dockerfile: Dockerfile7
-#        volumes:
-#          - "./data/es/es7:/usr/share/elasticsearch/data"
-#          - "./etc/elasticsearch/config/elasticsearch7.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
-#        ports:
-#          - 19200:9200
     elasticsearch-head:
         image: mobz/elasticsearch-head:5
         container_name: es7-head
