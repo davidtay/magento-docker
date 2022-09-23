@@ -3,9 +3,21 @@ vcl 4.1;
 import proxy;
 import std;
 
+probe health {
+    .url = "/health_check.php";
+    .interval  = 5m;
+    .timeout   = 5s;
+    .window    = 5;
+    .threshold = 3;
+}
+
 backend default {
     .host = "mysite_nginx";
     .port = "80";
+    .connect_timeout = 180s;
+    .first_byte_timeout = 300s;
+    .between_bytes_timeout = 120s;
+    .probe = health;
 }
 
 acl purge {

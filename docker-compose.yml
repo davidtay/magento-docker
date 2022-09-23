@@ -47,6 +47,7 @@ services:
           - "./etc/varnish/default.vcl:/etc/varnish/default.vcl"
         ports:
           - "80:80"
+          - "8443:80"
         tmpfs:
           - /var/lib/varnish:exec
         environment:
@@ -80,6 +81,14 @@ services:
         build:
             context: ./etc/php
             dockerfile: Dockerfile7.4
+        command: echo "Image only, not started by default."
+    php7.3:
+        container_name: php7.3
+        user: "1000:1000"
+        image: magento/php7.3
+        build:
+            context: ./etc/php
+            dockerfile: Dockerfile7.3
         command: echo "Image only, not started by default."
     selenium:
         container_name: selenium
@@ -167,6 +176,29 @@ services:
         ports:
           - 19201:9200
           - 9600:9600
+    elasticsearch7:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7
+        container_name: es7
+        environment:
+          - node.name=es7
+          - bootstrap.memory_lock=true
+          - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+        ulimits:
+          memlock:
+            soft: -1
+            hard: -1
+          nofile:
+            soft: 65536
+            hard: 65536
+        restart: always
+        build:
+            context: ./etc/elasticsearch
+            dockerfile: Dockerfile7
+        volumes:
+          - "./data/es/es7:/usr/share/elasticsearch/data"
+          - "./etc/elasticsearch/config/elasticsearch7.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
+        ports:
+          - 19200:9200
     elasticsearch-head:
         image: mobz/elasticsearch-head:5
         container_name: es7-head
